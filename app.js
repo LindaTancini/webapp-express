@@ -1,6 +1,7 @@
 //Express
 const express = require("express");
 const app = express();
+const db = require("./data/db");
 const port = 3000;
 //HomePage
 app.get("/", (req, res) => {
