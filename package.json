@@ -1,0 +1,21 @@
+{
+  "name": "webapp-express",
+  "version": "1.0.0",
+  "description": "- Utilizzando il file in allegato, creiamo un database con MySQL Workbench\r - Creiamo una nuova applicazione Express\r - Colleghiamo l’app al db e verifichiamo che tutto funzioni\r - Prepariamo una rotta index per ottenere la lista dei film\r - Prepariamo una rotta show per ottenere i dettagli di un singolo film e le sue recensioni",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LindaTancini/webapp-express.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LindaTancini/webapp-express/issues"
+  },
+  "homepage": "https://github.com/LindaTancini/webapp-express#readme"
+}
