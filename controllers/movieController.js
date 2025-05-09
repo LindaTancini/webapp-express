@@ -1,6 +1,14 @@
+//Connetto il db
+const connection = require("../data/db");
 //Index
 function index(req, res) {
-  res.send("Sono l'index dei film");
+  //Query
+  const sql = `SELECT * from movies;`;
+  //Eseguo la query
+  connection.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: "La query al db è fallita" });
+    res.json(results);
+  });
 }
 
 //Show
