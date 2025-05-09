@@ -2,7 +2,7 @@
 const express = require("express");
 const app = express();
 const db = require("./data/db");
-const port = 3000;
+const port = process.env.PORT || 3000;
 //HomePage
 app.get("/", (req, res) => {
   res.send("Homepage della Webapp!");
