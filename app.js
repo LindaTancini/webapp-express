@@ -15,6 +15,8 @@ app.use("/api/movies", movieRoutes);
 //Middlewares
 const notFound = require("./middlewares/notFound.js");
 const errorHandler = require("./middlewares/errorHandler.js");
+//Assets statici (rendo visibili le img)
+app.use(express.static("public"));
 //404
 app.use(notFound);
 //500
