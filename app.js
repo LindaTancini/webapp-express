@@ -6,6 +6,13 @@ const port = 3000;
 app.get("/", (req, res) => {
   res.send("Homepage della Webapp!");
 });
+//Middlewares
+const notFound = require("./middlewares/notFound.js");
+const errorHandler = require("./middlewares/errorHandler.js");
+//404
+app.use(notFound);
+//500
+app.use(errorHandler);
 // Avvio server
 app.listen(port, () => {
   console.log(`Sono un server attivo sulla porta:${port}`);
