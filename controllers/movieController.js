@@ -7,7 +7,12 @@ function index(req, res) {
   //Eseguo la query
   connection.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: "La query al db è fallita" });
-    res.json(results);
+    //Inserimento immagini
+    const movieImg = results.map((result) => ({
+      ...result,
+      imgPath: process.env.PUBLIC_PATH + "/img/" + result.image,
+    }));
+    res.json(movieImg);
   });
 }
 
@@ -23,8 +28,11 @@ function show(req, res) {
     if (err) return res.status(500).json({ error: "La query al db è fallita" });
     if (results.length === 0)
       return res.status(404).json({ error: "Il post non è stato trovato" });
-    //Invio la risposta
-    const movie = results[0];
+    //Invio la risposta e inserisco le immagini
+    const movie = {
+      ...results[0],
+      imgPath: process.env.PUBLIC_PATH + "/img/" + results[0].image,
+    };
     //Eseguo la query per la review
     connection.query(sqlReview, [id], (err, resultsReview) => {
       if (err)
