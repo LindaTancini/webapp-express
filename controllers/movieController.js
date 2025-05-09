@@ -3,7 +3,7 @@ const connection = require("../data/db");
 //Index
 function index(req, res) {
   //Query
-  const sql = `SELECT * from movies;`;
+  const sql = `SELECT * FROM movies;`;
   //Eseguo la query
   connection.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: "La query al db è fallita" });
@@ -13,7 +13,18 @@ function index(req, res) {
 
 //Show
 function show(req, res) {
-  res.send("Sono lo show dei film");
+  const { id } = req.params;
+  //Query
+  const sql = `SELECT * FROM movies WHERE id = ?`;
+  //Eseguo la query
+  connection.query(sql, [id], (err, results) => {
+    if (err) return res.status(500).json({ error: "La query al db è fallita" });
+    if (results.length === 0)
+      return res.status(404).json({ error: "Il post non è stato trovato" });
+    //Invio la risposta
+    const movie = results[0];
+    res.json(movie);
+  });
 }
 
 module.exports = {
