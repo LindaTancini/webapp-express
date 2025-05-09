@@ -2,8 +2,17 @@
 const connection = require("../data/db");
 //Index
 function index(req, res) {
-  //Query
-  const sql = `SELECT * FROM movies;`;
+  //Query con media delle recensioni
+  const sql = `
+  SELECT 
+    movies.*, AVG(reviews.vote) AS media_recensioni
+  FROM 
+    movies
+  LEFT JOIN 
+    reviews 
+    ON movies.id = reviews.movie_id
+  GROUP BY 
+    movies.id;`;
   //Eseguo la query
   connection.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: "La query al db è fallita" });
