@@ -8,6 +8,9 @@ app.get("/", (req, res) => {
 });
 //Body-parser
 app.use(express.json());
+//Route
+const movieRoutes = require("./routers/movies.js");
+app.use("/api/movies", movieRoutes);
 //Middlewares
 const notFound = require("./middlewares/notFound.js");
 const errorHandler = require("./middlewares/errorHandler.js");
