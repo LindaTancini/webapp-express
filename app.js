@@ -6,6 +6,8 @@ const port = 3000;
 app.get("/", (req, res) => {
   res.send("Homepage della Webapp!");
 });
+//Body-parser
+app.use(express.json());
 //Middlewares
 const notFound = require("./middlewares/notFound.js");
 const errorHandler = require("./middlewares/errorHandler.js");
