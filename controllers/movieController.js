@@ -2,8 +2,9 @@
 const connection = require("../data/db");
 //Index
 function index(req, res) {
+  const { search } = req.query;
   //Query con media delle recensioni
-  const sql = `
+  let sql = `
   SELECT 
     movies.*, AVG(reviews.vote) AS media_recensioni
   FROM 
@@ -11,18 +12,30 @@ function index(req, res) {
   LEFT JOIN 
     reviews 
     ON movies.id = reviews.movie_id
-  GROUP BY 
-    movies.id;`;
+  `;
+  //Filtro per la ricerca
+  if (search) {
+    sql += ` 
+        WHERE title LIKE "%${search}%" OR director LIKE "%${search}%" OR abstract LIKE "%${search}%"
+        `;
+  }
+
+  sql += ` GROUP BY movies.id`;
   //Eseguo la query
-  connection.query(sql, (err, results) => {
-    if (err) return res.status(500).json({ error: "La query al db è fallita" });
-    //Inserimento immagini
-    const movieImg = results.map((result) => ({
-      ...result,
-      imgPath: process.env.PUBLIC_PATH + "/img/" + result.image,
-    }));
-    res.json(movieImg);
-  });
+  connection.query(
+    sql,
+    [`%${search}%`, `%${search}%`, `%${search}%`],
+    (err, results) => {
+      if (err)
+        return res.status(500).json({ error: "La query al db è fallita" });
+      //Inserimento immagini
+      const movieImg = results.map((result) => ({
+        ...result,
+        imgPath: process.env.PUBLIC_PATH + "/img/" + result.image,
+      }));
+      res.json(movieImg);
+    }
+  );
 }
 
 //Show
