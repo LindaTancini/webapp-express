@@ -5,6 +5,12 @@ const db = require("./data/db");
 const port = process.env.PORT || 3000;
 const cors = require("cors");
 
+//Cors
+app.use(
+  cors({
+    origin: process.env.FE_APP,
+  })
+);
 //HomePage
 app.get("/", (req, res) => {
   res.send("Homepage della Webapp!");
@@ -17,12 +23,6 @@ app.use("/api/movies", movieRoutes);
 //Middlewares
 const notFound = require("./middlewares/notFound.js");
 const errorHandler = require("./middlewares/errorHandler.js");
-//Cors
-app.use(
-  cors({
-    origin: process.env.FE_APP,
-  })
-);
 //Assets statici (rendo visibili le img)
 app.use(express.static("public"));
 //404
