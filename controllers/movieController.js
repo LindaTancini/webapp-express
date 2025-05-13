@@ -73,7 +73,15 @@ function show(req, res) {
   });
 }
 
+// Post
+function storeReview(req, res) {
+  const { id } = req.params;
+  console.log(req.body);
+  res.send(`Hai aggiunta una recensione al film ${id}!`);
+}
+
 module.exports = {
   index,
   show,
+  storeReview,
 };
