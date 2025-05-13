@@ -40,7 +40,17 @@ function index(req, res) {
 function show(req, res) {
   const { id } = req.params;
   //Query
-  const sql = `SELECT * FROM movies WHERE id = ?`;
+  //const sql = `SELECT * FROM movies WHERE id = ?`;
+  const sql = `
+  SELECT 
+    movies.*, ROUND(AVG(reviews.vote), 2) AS reviews_vote
+  FROM 
+    movies
+  LEFT JOIN 
+    reviews 
+    ON movies.id = reviews.movie_id
+    WHERE movies.id = ?
+  `;
   // Query Review
   const sqlReview = `SELECT * FROM reviews WHERE movie_id = ?`;
   //Eseguo la query
