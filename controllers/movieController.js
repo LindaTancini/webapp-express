@@ -3,10 +3,12 @@ const connection = require("../data/db");
 //Index
 function index(req, res) {
   const { search } = req.query;
+  //Array per i parametri
+  const searchParams = [];
   //Query con media delle recensioni
   let sql = `
   SELECT 
-    movies.*, AVG(reviews.vote) AS media_recensioni
+    movies.*, AVG(reviews.vote) AS reviews_vote
   FROM 
     movies
   LEFT JOIN 
@@ -16,26 +18,22 @@ function index(req, res) {
   //Filtro per la ricerca
   if (search) {
     sql += ` 
-        WHERE title LIKE "%${search}%" OR director LIKE "%${search}%" OR abstract LIKE "%${search}%"
+        WHERE title LIKE ? OR director LIKE ? OR abstract LIKE ?
         `;
+    searchParams.push(`%${search}%`, `%${search}%`, `%${search}%`);
   }
 
   sql += ` GROUP BY movies.id`;
   //Eseguo la query
-  connection.query(
-    sql,
-    [`%${search}%`, `%${search}%`, `%${search}%`],
-    (err, results) => {
-      if (err)
-        return res.status(500).json({ error: "La query al db è fallita" });
-      //Inserimento immagini
-      const movieImg = results.map((result) => ({
-        ...result,
-        imgPath: process.env.PUBLIC_PATH + "/img/" + result.image,
-      }));
-      res.json(movieImg);
-    }
-  );
+  connection.query(sql, searchParams, (err, results) => {
+    if (err) return res.status(500).json({ error: "La query al db è fallita" });
+    //Inserimento immagini
+    const movieImg = results.map((result) => ({
+      ...result,
+      imgPath: process.env.PUBLIC_PATH + "/img/" + result.image,
+    }));
+    res.json(movieImg);
+  });
 }
 
 //Show
