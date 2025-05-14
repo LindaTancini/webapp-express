@@ -98,7 +98,18 @@ function storeReview(req, res) {
 
 // Store -> creazione film
 function store(req, res) {
-  res.send("Ho aggiunto un film");
+  //Corpo richiesta
+  const { title, director, genre, abstract } = req.body;
+  //Query
+  const sql = `INSERT INTO movies (title, director, genre, abstract)
+   VALUES (?, ?, ?, ?);`;
+
+  connection.query(sql, [title, director, genre, abstract], (err, results) => {
+    if (err) return res.status(500).json({ error: "La query al db è fallita" });
+
+    res.status(201);
+    res.json({ message: "Ho aggiunto un film" });
+  });
 }
 
 module.exports = {
