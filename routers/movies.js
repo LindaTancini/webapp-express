@@ -7,7 +7,9 @@ const movieControlls = require("../controllers/movieController");
 router.get("/", movieControlls.index);
 // SHOW -> visualizzo un solo post
 router.get("/:id", movieControlls.show);
-// POST  -> creo una nuova recensione
+// STORE -> creo un nuovo film
+router.post("/", movieControlls.store);
+// STORE -> creo una nuova recensione
 router.post("/:id/reviews", movieControlls.storeReview);
 
 module.exports = router;

@@ -73,7 +73,7 @@ function show(req, res) {
   });
 }
 
-// Post
+// Store ->  creazione recensione
 function storeReview(req, res) {
   //ID richiesta
   const { id } = req.params;
@@ -96,8 +96,14 @@ function storeReview(req, res) {
   });
 }
 
+// Store -> creazione film
+function store(req, res) {
+  res.send("Ho aggiunto un film");
+}
+
 module.exports = {
   index,
   show,
+  store,
   storeReview,
 };
