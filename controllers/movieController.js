@@ -75,9 +75,25 @@ function show(req, res) {
 
 // Post
 function storeReview(req, res) {
+  //ID richiesta
   const { id } = req.params;
-  console.log(req.body);
-  res.send(`Hai aggiunta una recensione al film ${id}!`);
+  //Corpo richiesta
+  const { name, vote, text } = req.body;
+  //Query
+  const sql = `INSERT INTO reviews (movie_id, name, vote, text)
+   VALUES (?, ?, ?, ?);`;
+
+  connection.query(sql, [id, name, vote, text], (err, results) => {
+    if (err) return res.status(500).json({ error: "La query al db è fallita" });
+
+    res.status(201);
+    res.json({
+      id,
+      name,
+      vote,
+      text,
+    });
+  });
 }
 
 module.exports = {
