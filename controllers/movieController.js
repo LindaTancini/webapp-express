@@ -1,5 +1,6 @@
 //Connetto il db
 const connection = require("../data/db");
+const slugify = require("slugify");
 //Index
 function index(req, res) {
   const { search } = req.query;
@@ -104,12 +105,17 @@ function store(req, res) {
   const imgName = req.file.filename;
   console.log(imgName);
   //Query
-  const sql = `INSERT INTO movies (title, director, genre, abstract, image)
-   VALUES (?, ?, ?, ?, ?);`;
+  const sql = `INSERT INTO movies (title, director, genre, abstract, image, slug)
+   VALUES (?, ?, ?, ?, ?, ?);`;
+
+  const slug = slugify(title, {
+    lower: true,
+    trim: true,
+  });
 
   connection.query(
     sql,
-    [title, director, genre, abstract, imgName],
+    [title, director, genre, abstract, imgName, slug],
     (err, results) => {
       if (err)
         return res.status(500).json({ error: "La query al db è fallita" });
