@@ -100,16 +100,24 @@ function storeReview(req, res) {
 function store(req, res) {
   //Corpo richiesta
   const { title, director, genre, abstract } = req.body;
+  //Creo variabile per inserire immagini
+  const imgName = req.file.filename;
+  console.log(imgName);
   //Query
-  const sql = `INSERT INTO movies (title, director, genre, abstract)
-   VALUES (?, ?, ?, ?);`;
+  const sql = `INSERT INTO movies (title, director, genre, abstract, image)
+   VALUES (?, ?, ?, ?, ?);`;
 
-  connection.query(sql, [title, director, genre, abstract], (err, results) => {
-    if (err) return res.status(500).json({ error: "La query al db è fallita" });
+  connection.query(
+    sql,
+    [title, director, genre, abstract, imgName],
+    (err, results) => {
+      if (err)
+        return res.status(500).json({ error: "La query al db è fallita" });
 
-    res.status(201);
-    res.json({ message: "Ho aggiunto un film" });
-  });
+      res.status(201);
+      res.json({ message: "Ho aggiunto un film" });
+    }
+  );
 }
 
 module.exports = {
