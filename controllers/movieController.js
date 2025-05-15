@@ -126,9 +126,69 @@ function store(req, res) {
   );
 }
 
+// Prev -> Prendo il film precedente
+function prev(req, res) {
+  const slug = req.params.slug;
+
+  connection.query(
+    `SELECT id FROM movies WHERE slug = ?`,
+    [slug],
+    (err, results) => {
+      if (err)
+        return res.status(500).json({ error: "La query al db è fallita" });
+      if (results.length === 0)
+        return res.status(404).json({ error: "Film non trovato" });
+
+      const currentId = results[0].id;
+      // Quert
+      connection.query(
+        `SELECT slug FROM movies WHERE id < ? ORDER BY id DESC LIMIT 1`,
+        [currentId],
+        (err, resultsPrev) => {
+          if (err) return res.status(500).json(err);
+          if (resultsPrev.length === 0) return res.status(404).json({});
+
+          res.json({ slug: resultsPrev[0].slug });
+        }
+      );
+    }
+  );
+}
+
+// Next -> Prendo il film successivo
+function next(req, res) {
+  const slug = req.params.slug;
+
+  // Prima prendi il film corrente per ottenere l'id
+  connection.query(
+    `SELECT id FROM movies WHERE slug = ?`,
+    [slug],
+    (err, results) => {
+      if (err)
+        return res.status(500).json({ error: "La query al db è fallita" });
+      if (results.length === 0) return res.status(404).json(err);
+
+      const currentId = results[0].id;
+      // Query
+      connection.query(
+        `SELECT slug FROM movies WHERE id > ? ORDER BY id ASC LIMIT 1`,
+        [currentId],
+        (err, resultsNext) => {
+          if (err) return res.status(500).json({ error: "Errore DB" });
+          if (resultsNext.length === 0) return res.json({ slug: null });
+
+          res.json({ slug: resultsNext[0].slug });
+        }
+      );
+    }
+  );
+}
+
 module.exports = {
   index,
   show,
   store,
   storeReview,
+  prev,
+  next,
 };
