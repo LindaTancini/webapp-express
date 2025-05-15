@@ -39,7 +39,7 @@ function index(req, res) {
 
 //Show
 function show(req, res) {
-  const { id } = req.params;
+  const { slug } = req.params;
   //Query
   //const sql = `SELECT * FROM movies WHERE id = ?`;
   const sql = `
@@ -50,14 +50,14 @@ function show(req, res) {
   LEFT JOIN 
     reviews 
     ON movies.id = reviews.movie_id
-    WHERE movies.id = ?
+    WHERE movies.slug = ?
   `;
   // Query Review
   const sqlReview = `SELECT * FROM reviews WHERE movie_id = ?`;
   //Eseguo la query
-  connection.query(sql, [id], (err, results) => {
+  connection.query(sql, [slug], (err, results) => {
     if (err) return res.status(500).json({ error: "La query al db è fallita" });
-    if (results.length === 0)
+    if (results.length === 0 || results[0]?.id === null)
       return res.status(404).json({ error: "Il post non è stato trovato" });
     //Invio la risposta e inserisco le immagini
     const movie = {
@@ -65,7 +65,7 @@ function show(req, res) {
       imgPath: process.env.PUBLIC_PATH + "/img/" + results[0].image,
     };
     //Eseguo la query per la review
-    connection.query(sqlReview, [id], (err, resultsReview) => {
+    connection.query(sqlReview, [results[0].id], (err, resultsReview) => {
       if (err)
         return res.status(500).json({ error: "La query al db è fallita" });
       movie.reviews = resultsReview;
